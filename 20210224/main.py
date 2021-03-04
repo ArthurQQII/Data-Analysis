@@ -13,7 +13,7 @@ def save_csv(dictionList, fileName):
     df = pd.DataFrame(dictionList, columns = ['block', 'trial', 'flankers', 
                                                 'firstTime', 'firstValue',
                                                 'detectTime', 'detectValue',
-                                                'timeDifferent'])
+                                                'timeDifferent','oneTrigger', 'trigger'])
 
     df.to_csv(fileName[:-11] + 'result.csv', index = False)
 
@@ -32,6 +32,7 @@ def run(fileName):
     trials = df["trial"]  # list of trial
     times = df["time"]    # list of time
     values = df["value"]
+    triggers = df["trigger"]
     flankers = df["flankers"]
     blockTrialList = []
     dictionList = []
@@ -42,13 +43,17 @@ def run(fileName):
                 blockTrialList.append(tempBlocktrial)
                 tempValue = {'block': blocks[i], 'trial':trials[i], 
                 'flankers' : flankers[i], 'firstTime': times[i], 
-                'firstValue': values[i], 'detectTime': -1, 'detectValue': -1}
+                'firstValue': values[i], 'detectTime': -1, 'detectValue': -1, 
+                'oneTrigger': 1, 'trigger': triggers[i]}
                 dictionList.append(tempValue)
             else:
+                index = len(dictionList) - 1
+                if dictionList[index]['trigger'] != triggers[i]:
+                    dictionList[index]['trigger'] = "left/right"
+                    dictionList[index]['oneTrigger'] = 0
                 # find the value that matches the rule
-                if dictionList[len(dictionList) - 1]['detectTime'] == -1: 
+                if dictionList[index]['detectTime'] == -1: 
                     if values[i] >= -0.5:
-                        index = len(dictionList) - 1
                         dictionList[index]['detectTime'] = times[i]
                         dictionList[index]['detectValue'] = values[i]
                         dictionList[index]['timeDifferent'] = times[i] - dictionList[index]['firstTime']

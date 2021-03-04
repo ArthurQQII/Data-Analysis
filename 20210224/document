@@ -1,0 +1,9 @@
+main.py:
+
+output in each data folder *****result.csv:
+    list all 'block', 'trial', 'flankers', 'firstTime', 'firstValue',
+              'detectTime', 'detectValue','timeDifferent','oneTrigger', 'trigger'
+
+    where the time should be positive, and the detected value is the value 
+        that greater than -0.5, oneTrigger indicate there are one trigger or two 
+        triggers in that trial of that block, 1 means one trigger, 0 means two triggers
